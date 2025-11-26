@@ -1,0 +1,85 @@
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective settings
+[WARNING] Unrecognised tag: 'id' (position: START_TAG seen ...</profile>\r\n    -->\r\n <id>... @235:6)  @ D:\software\develop_tools\maven\apache-maven-3.8.5\conf\settings.xml, line 235, column 6
+[WARNING] 
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.oidc:oidc-client-backend >--------------------
+[INFO] Building OIDC Client Backend 1.0.0
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot-maven-plugin:3.2.0:run (default-cli) > test-compile @ oidc-client-backend >>>
+[INFO] 
+[INFO] --- maven-resources-plugin:3.3.1:resources (default-resources) @ oidc-client-backend ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.11.0:compile (default-compile) @ oidc-client-backend ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.3.1:testResources (default-testResources) @ oidc-client-backend ---
+[INFO] skip non existing resourceDirectory D:\software\develop_tools\git\github\workspace\oidc-security\oidc-client-backend\src\test\resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.11.0:testCompile (default-testCompile) @ oidc-client-backend ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] <<< spring-boot-maven-plugin:3.2.0:run (default-cli) < test-compile @ oidc-client-backend <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot-maven-plugin:3.2.0:run (default-cli) @ oidc-client-backend ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2025-11-26T23:37:30.433+08:00  INFO 17912 --- [oidc-client-backend] [           main] com.oidc.client.OidcClientApplication    : Starting OidcClientApplication using Java 17.0.15 with PID 17912 (D:\software\develop_tools\git\github\workspace\oidc-security\oidc-client-backend\target\classes started by yuequanhuabai in D:\software\develop_tools\git\github\workspace\oidc-security\oidc-client-backend)
+2025-11-26T23:37:30.435+08:00 DEBUG 17912 --- [oidc-client-backend] [           main] com.oidc.client.OidcClientApplication    : Running with Spring Boot v3.2.0, Spring v6.1.1
+2025-11-26T23:37:30.436+08:00  INFO 17912 --- [oidc-client-backend] [           main] com.oidc.client.OidcClientApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-11-26T23:37:31.117+08:00  INFO 17912 --- [oidc-client-backend] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2025-11-26T23:37:31.124+08:00  INFO 17912 --- [oidc-client-backend] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-11-26T23:37:31.124+08:00  INFO 17912 --- [oidc-client-backend] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2025-11-26T23:37:31.167+08:00  INFO 17912 --- [oidc-client-backend] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-11-26T23:37:31.168+08:00  INFO 17912 --- [oidc-client-backend] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 693 ms
+2025-11-26T23:37:31.199+08:00 DEBUG 17912 --- [oidc-client-backend] [           main] com.oidc.client.filter.JwtTokenFilter    : Filter 'jwtTokenFilter' configured for use
+2025-11-26T23:37:31.257+08:00  WARN 17912 --- [oidc-client-backend] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 3e5a0932-7549-40a9-a0f7-3c98be2f4f73
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-11-26T23:37:31.407+08:00  INFO 17912 --- [oidc-client-backend] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6025d790, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@af7e376, org.springframework.security.web.context.SecurityContextHolderFilter@3965bdf9, org.springframework.security.web.header.HeaderWriterFilter@5d0b0cb9, org.springframework.web.filter.CorsFilter@5dcd0cdf, org.springframework.security.web.authentication.logout.LogoutFilter@12c0c0b3, com.oidc.client.filter.JwtTokenFilter@467b684d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1860f3be, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6cd15072, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4fb04a72, org.springframework.security.web.access.ExceptionTranslationFilter@32d5279, org.springframework.security.web.access.intercept.AuthorizationFilter@32bb0072]
+2025-11-26T23:37:31.580+08:00  WARN 17912 --- [oidc-client-backend] [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-11-26T23:37:31.591+08:00  INFO 17912 --- [oidc-client-backend] [           main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-11-26T23:37:31.601+08:00 ERROR 17912 --- [oidc-client-backend] [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8081 was already in use.
+
+Action:
+
+Identify and stop the process that[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  21:32 min
+[INFO] Finished at: 2025-11-26T23:54:16+08:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:3.2.0:run (default-cli) on project oidc-client-backend: Process terminated with exit code: 1 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
+] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
