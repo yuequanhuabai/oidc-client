@@ -29,6 +29,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         if (path.equals("/api/auth/token") ||
             path.equals("/api/auth/health") ||
             path.equals("/api/health") ||
+            path.equals("/callback") ||
             path.startsWith("/static/")) {
             filterChain.doFilter(request, response);
             return;
@@ -64,6 +65,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         return path.equals("/api/auth/token") ||
                path.equals("/api/health") ||
+               path.equals("/callback") ||
                path.startsWith("/static/");
     }
 }

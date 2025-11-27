@@ -15,7 +15,7 @@ oidc:
   client:
     id: my-app
     secret: secret123
-    redirect-uri: http://localhost:5173/callback
+    redirect-uri: http://localhost:8081/callback
     scope: openid profile email
 
 jwt:

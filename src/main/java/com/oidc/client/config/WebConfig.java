@@ -28,7 +28,7 @@ public class WebConfig {
                 .csrf(csrf -> csrf.disable())
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/auth/token", "/api/auth/health", "/api/health").permitAll()
+                        .requestMatchers("/callback", "/api/auth/token", "/api/auth/health", "/api/health").permitAll()
                         .anyRequest().authenticated()
                 );
 

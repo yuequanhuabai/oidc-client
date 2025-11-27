@@ -23,6 +23,7 @@ public class OidcClientService {
     private final String tokenEndpoint;
     private final String clientId;
     private final String clientSecret;
+    private final String redirectUri;
 
     public OidcClientService(
             JwtTokenValidator jwtTokenValidator,
@@ -30,13 +31,15 @@ public class OidcClientService {
             @Value("${oidc.server.url:http://localhost:8080}") String oidcServerUrl,
             @Value("${oidc.server.token-endpoint:/oidc/token}") String tokenEndpoint,
             @Value("${oidc.client.id:my-app}") String clientId,
-            @Value("${oidc.client.secret:secret123}") String clientSecret) {
+            @Value("${oidc.client.secret:secret123}") String clientSecret,
+            @Value("${oidc.client.redirect-uri:http://localhost:8081/callback}") String redirectUri) {
         this.jwtTokenValidator = jwtTokenValidator;
         this.restTemplate = restTemplate;
         this.oidcServerUrl = oidcServerUrl;
         this.tokenEndpoint = tokenEndpoint;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
+        this.redirectUri = redirectUri;
     }
 
     public TokenResponse exchangeCodeForToken(String code) {
@@ -46,6 +49,7 @@ public class OidcClientService {
             Map<String, String> params = new HashMap<>();
             params.put("grant_type", "authorization_code");
             params.put("code", code);
+            params.put("redirect_uri", redirectUri);
             params.put("client_id", clientId);
             params.put("client_secret", clientSecret);
 
