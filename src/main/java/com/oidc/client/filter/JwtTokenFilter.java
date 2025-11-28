@@ -1,6 +1,7 @@
 package com.oidc.client.filter;
 
 import com.oidc.client.util.JwtTokenValidator;
+import jakarta.servlet.http.Cookie;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -35,11 +36,31 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        String authHeader = request.getHeader("Authorization");
+        String token = null;
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
+        // 优先从 Cookie 中读取 Token（HttpOnly Cookie 方式）
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("access_token".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    log.debug("Token extracted from HttpOnly cookie");
+                    break;
+                }
+            }
+        }
 
+        // 如果 Cookie 中没有，尝试从 Authorization header 读取（向后兼容）
+        if (token == null) {
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                token = authHeader.substring(7);
+                log.debug("Token extracted from Authorization header");
+            }
+        }
+
+        // 验证 Token
+        if (token != null) {
             if (jwtTokenValidator.validateToken(token)) {
                 String username = jwtTokenValidator.getUsernameFromToken(token);
                 Long userId = jwtTokenValidator.getUserIdFromToken(token);
@@ -47,12 +68,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 request.setAttribute("userId", userId);
                 request.setAttribute("username", username);
 
-                log.debug("Token validated for user: {}", username);
+                log.debug("✓ Token validated for user: {}", username);
                 filterChain.doFilter(request, response);
                 return;
             } else {
-                log.warn("Invalid token provided");
+                log.warn("✗ Invalid token provided");
             }
+        } else {
+            log.warn("✗ No token found in cookies or Authorization header");
         }
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

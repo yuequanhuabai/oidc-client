@@ -4,6 +4,8 @@ import com.oidc.client.dto.TokenExchangeRequest;
 import com.oidc.client.dto.TokenResponse;
 import com.oidc.client.dto.UserInfo;
 import com.oidc.client.service.OidcClientService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -59,5 +61,38 @@ public class AuthController {
     @GetMapping("/health")
     public ResponseEntity<?> health() {
         return ResponseEntity.ok("{\"status\": \"ok\"}");
+    }
+
+    /**
+     * 登出端点 - 清除 HttpOnly Cookies
+     */
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        // 清除 access_token Cookie
+        Cookie accessTokenCookie = new Cookie("access_token", null);
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setSecure(false);
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge(0);  // 立即过期
+        response.addCookie(accessTokenCookie);
+
+        // 清除 id_token Cookie
+        Cookie idTokenCookie = new Cookie("id_token", null);
+        idTokenCookie.setHttpOnly(true);
+        idTokenCookie.setSecure(false);
+        idTokenCookie.setPath("/");
+        idTokenCookie.setMaxAge(0);
+        response.addCookie(idTokenCookie);
+
+        // 清除 username Cookie
+        Cookie usernameCookie = new Cookie("username", null);
+        usernameCookie.setHttpOnly(false);
+        usernameCookie.setSecure(false);
+        usernameCookie.setPath("/");
+        usernameCookie.setMaxAge(0);
+        response.addCookie(usernameCookie);
+
+        log.info("✓ User logged out, cookies cleared");
+        return ResponseEntity.ok("{\"message\": \"Logged out successfully\"}");
     }
 }

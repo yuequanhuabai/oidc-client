@@ -2,6 +2,8 @@ package com.oidc.client.controller;
 
 import com.oidc.client.dto.TokenResponse;
 import com.oidc.client.service.OidcClientService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -17,7 +19,8 @@ public class CallbackController {
 
     @GetMapping("/callback")
     public String handleCallback(@RequestParam String code,
-                                  @RequestParam(required = false) String state) {
+                                  @RequestParam(required = false) String state,
+                                  HttpServletResponse response) {
         log.info("Received authorization code: {} with state: {}", code, state);
 
         // 验证 state 参数是否存在（CSRF 防护）
@@ -33,13 +36,38 @@ public class CallbackController {
             if (tokenResponse != null) {
                 log.info("✓ Token exchange successful for user: {}", tokenResponse.getUsername());
 
-                // 重定向到前端 callback 页面，使用 hash fragment 传递 token 和 state（不会发送到服务器）
-                // 包含 state 参数让前端进行验证
+                // 设置 Access Token 为 HttpOnly Cookie（防 XSS 攻击）
+                Cookie accessTokenCookie = new Cookie("access_token", tokenResponse.getAccessToken());
+                accessTokenCookie.setHttpOnly(true);  // JavaScript 无法访问
+                accessTokenCookie.setSecure(false);    // 开发环境用 false，生产环境改为 true（需要 HTTPS）
+                accessTokenCookie.setPath("/");
+                accessTokenCookie.setMaxAge(3600);     // 1 小时
+                // accessTokenCookie.setAttribute("SameSite", "Strict"); // Spring Boot 2.6+ 支持
+                response.addCookie(accessTokenCookie);
+
+                // 设置 ID Token 为 HttpOnly Cookie（如果存在）
+                if (tokenResponse.getIdToken() != null && !tokenResponse.getIdToken().isEmpty()) {
+                    Cookie idTokenCookie = new Cookie("id_token", tokenResponse.getIdToken());
+                    idTokenCookie.setHttpOnly(true);
+                    idTokenCookie.setSecure(false);
+                    idTokenCookie.setPath("/");
+                    idTokenCookie.setMaxAge(3600);
+                    response.addCookie(idTokenCookie);
+                }
+
+                // 设置用户名为普通 Cookie（前端需要显示）
+                Cookie usernameCookie = new Cookie("username", tokenResponse.getUsername());
+                usernameCookie.setHttpOnly(false);  // 允许 JavaScript 读取
+                usernameCookie.setSecure(false);
+                usernameCookie.setPath("/");
+                usernameCookie.setMaxAge(3600);
+                response.addCookie(usernameCookie);
+
+                log.info("✓ Tokens stored in HttpOnly cookies");
+
+                // 重定向到前端 callback 页面（只传递 state，不传递 Token）
                 String frontendUrl = String.format(
-                    "http://localhost:5173/callback#access_token=%s&id_token=%s&username=%s&state=%s",
-                    tokenResponse.getAccessToken(),
-                    tokenResponse.getIdToken() != null ? tokenResponse.getIdToken() : "",
-                    tokenResponse.getUsername(),
+                    "http://localhost:5173/callback?state=%s",
                     state
                 );
 
