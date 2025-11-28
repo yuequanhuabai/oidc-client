@@ -18,7 +18,13 @@ public class CallbackController {
     @GetMapping("/callback")
     public String handleCallback(@RequestParam String code,
                                   @RequestParam(required = false) String state) {
-        log.info("Received authorization code: {}", code);
+        log.info("Received authorization code: {} with state: {}", code, state);
+
+        // 验证 state 参数是否存在（CSRF 防护）
+        if (state == null || state.isEmpty()) {
+            log.warn("✗ Missing state parameter - potential CSRF attack");
+            return "redirect:http://localhost:5173/?error=invalid_state";
+        }
 
         try {
             // 用授权码换取 token
@@ -27,12 +33,14 @@ public class CallbackController {
             if (tokenResponse != null) {
                 log.info("✓ Token exchange successful for user: {}", tokenResponse.getUsername());
 
-                // 重定向到前端 callback 页面，使用 hash fragment 传递 token（不会发送到服务器）
+                // 重定向到前端 callback 页面，使用 hash fragment 传递 token 和 state（不会发送到服务器）
+                // 包含 state 参数让前端进行验证
                 String frontendUrl = String.format(
-                    "http://localhost:5173/callback#access_token=%s&id_token=%s&username=%s",
+                    "http://localhost:5173/callback#access_token=%s&id_token=%s&username=%s&state=%s",
                     tokenResponse.getAccessToken(),
                     tokenResponse.getIdToken() != null ? tokenResponse.getIdToken() : "",
-                    tokenResponse.getUsername()
+                    tokenResponse.getUsername(),
+                    state
                 );
 
                 return "redirect:" + frontendUrl;
